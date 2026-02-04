@@ -18,7 +18,6 @@ from typing import Callable, TypeVar
 import logging
 
 F = TypeVar("F", bound=Callable[..., object])
-
 """INITIALIZATION"""
 
 # Load environment variables
@@ -276,20 +275,21 @@ def contact() -> ResponseReturnValue:
         sends the message via `send_message`, and renders the page
         with a confirmation that the message was sent.
     """
-
+    msg_sent = False
+    email_error = False
     if request.method == "POST":
         name = request.form.get("name")
         email = request.form.get("email")
         phone = request.form.get("phone")
         message = request.form.get("message")
 
-        send_message(name, email, phone, message)
-        return render_template("contact.html", msg_sent=True)
+        msg_sent = send_message(name, email, phone, message)
+        email_error = not msg_sent
 
-    return render_template("contact.html", msg_sent=False)
+    return render_template("contact.html", error=email_error, msg_sent=msg_sent)
 
 
-def send_message(name: str, user_email: str, phone: str, message: str) -> None:
+def send_message(name: str, user_email: str, phone: str, message: str) -> bool:
     """
     Send a contact message via email.
 
@@ -320,9 +320,10 @@ def send_message(name: str, user_email: str, phone: str, message: str) -> None:
             server.starttls()
             server.login(EMAIL, PASSWORD)
             server.send_message(msg)
+            return True
     except SMTPException as exc:
         logging.exception(f"Failed to send contact email: {exc}")
-
+        return False
 
 if __name__ == "__main__":
     app.run(debug=False, port=5002)
