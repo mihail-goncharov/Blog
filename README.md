@@ -136,7 +136,7 @@ python -m flask --app app.main run
 
 ### Live demo
 Open the deployed site and try the flows directly. 
-**Live demo:** https://blog-p9im.onrender.com/ ←
+**Live demo:** https://blog-c4ko.onrender.com ←
 - **Admin:** `admin@gmail.com` / `asdf`  
 - **User:** `user@gmail.com` / `user123`
 
