@@ -30,12 +30,46 @@ Database Integrity - SQLAlchemy models with proper relationships and cascades.
 
 - Configuration: python-dotenv.
 
-- CI/CD: GitHub Actions (Automated Testing & Deployment).
+- CI/CD: GitHub Actions.
 
-- Hosting: Render (backend).
+- Hosting: Render.
 
+## Quick start with Docker
 
-## Quick Start
+### Prerequisites
+- Docker and Docker Compose must be installed on your machine.
+
+### Installations
+#### 1. Clone this repository
+ ```
+git clone https://github.com/Goncharov-Michael/Blog.git 
+cd Blog
+ ```
+
+#### 2. Create and configure your environment file:
+**Windows:**
+```type nul > .env```
+
+**Linux / macOS / Git Bash:**
+```touch .env```
+```
+echo FLASK_KEY=your_flask_password>> .env
+echo FLASK_APP=app.main>> .env
+echo POSTGRES_USER=username>> .env
+echo POSTGRES_PASSWORD=password>> .env
+echo POSTGRES_DB=blog>> .env
+echo DATABASE_URL=postgresql://username:password@db:5432/blog>> .env
+echo EMAIL=your_email>> .env
+echo EMAIL_PASSWORD=your_email_app_password>> .env
+```
+
+#### 3. Start the services with Docker Compose:
+```
+cd docker
+docker compose up -d
+```
+
+## Quick Start locally.
 
 ### Prerequisites
 
@@ -44,7 +78,7 @@ Database Integrity - SQLAlchemy models with proper relationships and cascades.
 - PostgreSQL
 
 ### Installations
-#### 1. Clone the repository 
+#### 1. Clone this repository 
  ```
  git clone https://github.com/Goncharov-Michael/Blog.git 
  cd Blog
@@ -65,12 +99,12 @@ Database Integrity - SQLAlchemy models with proper relationships and cascades.
  EMAIL_PASSWORD=your_app_password 
  ```
  
- > **Notes:** The application now uses PostgreSQL. DATABASE_URL must point to a PostgreSQL database. 
+ > **Notes:** The application uses PostgreSQL. DATABASE_URL must point to a PostgreSQL database. 
 
-#### 4. Create the database (local)
+#### 4. Create the database
  - bash:
  ```
- $ psql -U postgres -c "CREATE DATABASE <database_name>;"
+ psql -U postgres -c "CREATE DATABASE <database_name>;"
  ```
 
 #### 5. Create database schema (migrations)
@@ -80,15 +114,14 @@ Database Integrity - SQLAlchemy models with proper relationships and cascades.
  - From the project root, with your venv active and dependencies installed, run: 
  > Replace "main.py" with the name of your main file if different.
 
- bash:
+ - bash:
  ```
- python -m flask --app main.py db migrate -m "Initial migration"
- python -m flask --app main.py db upgrade
+ python -m flask --app app.main.py db upgrade
  ```
 
 #### 6. Run the App: 
  ```
- python main.py 
+python -m flask --app app.main run 
  ```
 
 #### Troubleshooting
@@ -103,7 +136,7 @@ Database Integrity - SQLAlchemy models with proper relationships and cascades.
 
 ### Live demo
 Open the deployed site and try the flows directly. 
-**Live demo:** https://blog-p9im.onrender.com/ ←
+**Live demo:** https://blog-c4ko.onrender.com ←
 - **Admin:** `admin@gmail.com` / `asdf`  
 - **User:** `user@gmail.com` / `user123`
 
@@ -112,7 +145,7 @@ Open the deployed site and try the flows directly.
 ---
 
 **Security notes**
-- Demo credentials are for testing only. Change or remove them before publicly sharing your instance.  
+- Demo credentials are for testing only. 
 - Never commit real credentials or your `.env` file to the repository.
 
 
@@ -149,12 +182,17 @@ Open the deployed site and try the flows directly.
 
 
 ### Environment Variables
-| Variable         | Description                                                                                                 
-| ---------------- | ----------------------------------------------------------------------------------------------------------- |
-| `FLASK_KEY`      | Secret key for sessions and CSRF protection                                                                 |
-| `DATABASE_URL`   | PostgreSQL connection URL (e.g. postgresql://user:password@host:5432/db)|
-| `EMAIL`          | Gmail address used to send contact form messages                                                            |
-| `EMAIL_PASSWORD` | App password for Gmail (required if sending emails)                                                         |
+
+| Variable         | Description                                                                                                 |
+|------------------|-------------------------------------------------------------------------------------------------------------|
+| FLASK_KEY        | Secret key for Flask sessions and CSRF protection (used locally and in Docker)                               |
+| FLASK_APP        | Flask application entry point (used locally and in Docker)                                                 |
+| DATABASE_URL     | PostgreSQL connection URL (e.g. postgresql://user:password@host:5432/db) (used locally and in Docker)      |
+| EMAIL            | Gmail address used to send contact form messages (used locally and in Docker)                               |
+| EMAIL_PASSWORD   | App password for Gmail (required for sending emails) (used locally and in Docker)                            |
+| POSTGRES_DB      | Name of the PostgreSQL database created in Docker (used only in Docker)                                     |
+| POSTGRES_USER    | Username for the PostgreSQL container (used only in Docker)                                                |
+| POSTGRES_PASSWORD| Password for the PostgreSQL container (used only in Docker)                                                |
 
 ### License
 This project is licensed under the MIT License—see the LICENSE file for details.
